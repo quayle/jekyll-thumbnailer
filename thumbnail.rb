@@ -41,12 +41,15 @@ class Jekyll::Thumbnail < Liquid::Tag
         source = context[$1]
       end
 
-      source_path = "./source#{source}"
+      baseurl = context.registers[:site].baseurl
+
+      source_path = "./#{source}"
       raise "#{source} is not readable" unless File.readable?(source_path)
       ext = File.extname(source)
       desc = dimensions.gsub(/[^\da-z]+/i, '')
       dest = "#{File.dirname(source)}/#{File.basename(source, ext)}_#{desc}#{ext}"
-      dest_path = "./source#{dest}"
+      dest_path = "./#{dest}"
+      dest = baseurl + dest
 
       # only thumbnail the image if it doesn't exist tor is less recent than the source file
       # will prevent re-processing thumbnails for a ton of images...
